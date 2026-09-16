@@ -45,9 +45,10 @@ public class DietComponents implements EntityComponentInitializer {
     ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(
         (player, origin, destination) -> DietComponents.DIET_TRACKER.maybeGet(player)
             .ifPresent(IDietTracker::sync));
-    ServerPlayConnectionEvents.JOIN.register(
-        (handler, sender, server) -> DietComponents.DIET_TRACKER.maybeGet(handler.getPlayer())
-            .ifPresent(IDietTracker::sync));
+    ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+      com.illusivesoulworks.diet.common.DietEvents.syncDatapack(handler.getPlayer());
+      DietComponents.DIET_TRACKER.maybeGet(handler.getPlayer()).ifPresent(IDietTracker::sync);
+    });
   }
 
   @Override

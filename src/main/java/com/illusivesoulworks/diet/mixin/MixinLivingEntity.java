@@ -58,7 +58,7 @@ public class MixinLivingEntity {
         ((LivingEntity) (Object) this) instanceof Player) {
       FoodProperties food = diet$copy.get(net.minecraft.core.component.DataComponents.FOOD);
 
-      if (food != null) {
+      if (food != null || com.illusivesoulworks.diet.platform.Services.REGISTRY.isSpecialFood(diet$copy)) {
         DietComponents.DIET_TRACKER.maybeGet(this).ifPresent(diet -> diet.consume(diet$copy));
       }
     }

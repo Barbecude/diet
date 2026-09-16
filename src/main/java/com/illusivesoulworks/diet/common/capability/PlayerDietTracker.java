@@ -142,7 +142,7 @@ public class PlayerDietTracker implements IDietTracker {
   @Override
   public void consume(ItemStack stack, int healing, float saturationModifier) {
 
-    if (this.active && this.prevFood != this.player.getFoodData().getFoodLevel() &&
+    if (this.active &&
         !Services.EVENT.fireConsumeStackEvent(stack, this.player)) {
       IDietResult result =
           DietApi.getInstance().get(this.player, stack, healing, saturationModifier);
@@ -157,7 +157,7 @@ public class PlayerDietTracker implements IDietTracker {
   @Override
   public void consume(List<ItemStack> stacks, int healing, float saturationModifier) {
 
-    if (this.active && this.prevFood != this.player.getFoodData().getFoodLevel()) {
+    if (this.active) {
       IDietResult result =
           DietApi.getInstance().get(this.player, stacks, healing, saturationModifier);
 
@@ -170,7 +170,7 @@ public class PlayerDietTracker implements IDietTracker {
   @Override
   public void consume(ItemStack stack) {
 
-    if (this.active && this.prevFood != this.player.getFoodData().getFoodLevel() &&
+    if (this.active &&
         !Services.EVENT.fireConsumeStackEvent(stack, this.player)) {
       IDietResult result = DietApi.getInstance().get(this.player, stack);
 
