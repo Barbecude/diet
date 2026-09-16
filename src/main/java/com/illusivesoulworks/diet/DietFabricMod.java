@@ -41,6 +41,7 @@ public class DietFabricMod implements ModInitializer {
 
   @Override
   public void onInitialize() {
+    com.illusivesoulworks.diet.common.config.DietConfigLoader.setup();
     com.illusivesoulworks.diet.common.DietFabricNetwork.registerPayloads();
     Registry.register(BuiltInRegistries.ATTRIBUTE, DietCommonMod.resource("natural_regeneration"),
         DietApi.getInstance().getNaturalRegeneration());

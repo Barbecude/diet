@@ -58,6 +58,11 @@ public class DietValueGenerator {
     GENERATED.clear();
     TRAILS.clear();
 
+    if (!DietConfig.SERVER_SPEC.isLoaded()) {
+      DietConstants.LOG.warn("Diet server config is not yet loaded, skipping value generation.");
+      return;
+    }
+
     if (DietConfig.SERVER.generateGroupsForEmptyItems.get()) {
       DietConstants.LOG.info("Generating diet values...");
       Stopwatch stopwatch = Stopwatch.createUnstarted();

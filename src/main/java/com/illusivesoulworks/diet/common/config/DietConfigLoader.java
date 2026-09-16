@@ -23,7 +23,13 @@ import com.illusivesoulworks.spectrelib.config.SpectreConfigLoader;
 
 public class DietConfigLoader {
 
-  public static void setup() {
+  private static boolean initialized = false;
+
+  public static synchronized void setup() {
+    if (initialized) {
+      return;
+    }
+    initialized = true;
     SpectreConfigLoader.add(SpectreConfig.Type.CLIENT, DietConfig.CLIENT_SPEC, DietConstants.MOD_ID);
     SpectreConfig cfg =
         SpectreConfigLoader.add(SpectreConfig.Type.SERVER, DietConfig.SERVER_SPEC, DietConstants.MOD_ID);

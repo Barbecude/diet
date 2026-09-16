@@ -20,6 +20,9 @@
     "client": [
       "com.illusivesoulworks.diet.client.DietFabricClientMod"
     ],
+    "spectrelib-config": [
+      "com.illusivesoulworks.diet.DietConfigInitializer"
+    ],
     "spectrelib": [
       "com.illusivesoulworks.diet.DietConfigInitializer"
     ],
