@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "package": "com.illusivesoulworks.diet.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "DietMixinDietApi",
+    "DietMixinFoodData",
+    "DietMixinPlayer",
+    "DietMixinServerPlayerGameMode",
+    "MixinLivingEntity",
+    "MixinPlayer"
+  ],
+  "client": [
+    "AccessorContainerScreen"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}
