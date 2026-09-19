@@ -8,7 +8,7 @@ version = project.version
 group = project.group
 
 base {
-    archivesName = project.mod_id
+    archivesName = project.mod_id + '-neoforge'
 }
 
 java {
@@ -18,7 +18,6 @@ java {
 
 repositories {
     mavenCentral()
-
     maven {
         name = 'Illusive Soulworks'
         url = 'https://maven.theillusivec4.top/'
@@ -28,39 +27,57 @@ repositories {
 neoForge {
     version = '21.0.167'
 
-    runs {
-        client {
-            client()
-        }
+    parchment {
+        minecraftVersion = project.parchment_mc_version
+        mappingsVersion = project.parchment_version
+    }
 
+    runs {
+        client { client() }
         server {
             server()
+            programArgument '--nogui'
         }
-
         data {
             data()
+            programArguments.addAll '--mod', project.mod_id, '--all',
+                '--output', file('src/generated/resources/').getAbsolutePath(),
+                '--existing', file('src/main/resources/').getAbsolutePath()
         }
     }
 
     mods {
-        diet {
-            sourceSet sourceSets.main
-        }
-    }
-
-    parchment {
-        minecraftVersion = '1.21'
-        mappingsVersion = '2024.07.28'
+        diet { sourceSet sourceSets.main }
     }
 }
 
+sourceSets {
+    main {
+        java {
+            exclude '**/DietFabricMod.java'
+            exclude '**/DietFabricClientMod.java'
+            exclude '**/DietFabricNetwork.java'
+            exclude '**/DietFabricGroups.java'
+            exclude '**/DietFabricSuites.java'
+            exclude '**/Fabric*.java'
+            exclude '**/DietConfigInitializer.java'
+            exclude '**/ModIdArgument.java'
+            exclude '**/common/component/DietComponent.java'
+            exclude '**/common/component/DietComponents.java'
+            exclude '**/mixin/DietMixinDietApi.java'
+            exclude '**/mixin/MixinLivingEntity.java'
+            exclude '**/mixin/MixinPlayer.java'
+        }
+    }
+    main.resources.srcDir 'src/generated/resources'
+}
+
 dependencies {
-    implementation "com.illusivesoulworks.spectrelib:spectrelib-neoforge:${spectrelib_version}"
+    implementation "com.illusivesoulworks.spectrelib:spectrelib-neoforge:${'${spectrelib_version}'}"
 }
 
 processResources {
     inputs.property 'version', project.version
-
     filesMatching('META-INF/neoforge.mods.toml') {
         expand(
             version: project.version,
@@ -73,7 +90,6 @@ processResources {
             issue_tracker: project.issue_tracker
         )
     }
-
     filesMatching('pack.mcmeta') {
         expand 'mod_name': project.mod_name
     }
@@ -84,12 +100,9 @@ tasks.withType(JavaCompile).configureEach {
     options.release = 21
 }
 
-jar {
-    from("LICENSE") {
-        rename { "${it}_${project.base.archivesName.get()}" }
-    }
-
+tasks.withType(Jar).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from("LICENSE")
     from("COPYING")
     from("COPYING.LESSER")
 }
-
