@@ -1,80 +1,33 @@
-/*
- * Copyright (C) 2021-2023 Illusive Soulworks
- *
- * Diet is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * Diet is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with Diet.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package com.illusivesoulworks.diet.api;
 
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public final class DietEvents {
+  private static final List<ConsumeItemStack> CONSUME_LISTENERS = new ArrayList<>();
+  private static final List<ApplyDecay> DECAY_LISTENERS = new ArrayList<>();
+  private static final List<ApplyEffect> EFFECT_LISTENERS = new ArrayList<>();
 
-  public static final Event<ConsumeItemStack> CONSUME_STACK =
-      EventFactory.createArrayBacked(ConsumeItemStack.class, (listeners) -> (stack, player) -> {
+  public static void registerConsumeListener(ConsumeItemStack listener) { CONSUME_LISTENERS.add(listener); }
+  public static void registerDecayListener(ApplyDecay listener) { DECAY_LISTENERS.add(listener); }
+  public static void registerEffectListener(ApplyEffect listener) { EFFECT_LISTENERS.add(listener); }
 
-        for (ConsumeItemStack listener : listeners) {
-
-          if (!listener.consumeItemStack(stack, player)) {
-            return true;
-          }
-        }
-        return false;
-      });
-
-  public static final Event<ApplyDecay> APPLY_DECAY =
-      EventFactory.createArrayBacked(ApplyDecay.class, (listeners) -> (player) -> {
-
-        for (ApplyDecay listener : listeners) {
-
-          if (!listener.applyDecay(player)) {
-            return true;
-          }
-        }
-        return false;
-      });
-
-  public static final Event<ApplyEffect> APPLY_EFFECT =
-      EventFactory.createArrayBacked(ApplyEffect.class, (listeners) -> (player) -> {
-
-        for (ApplyEffect listener : listeners) {
-
-          if (!listener.applyEffect(player)) {
-            return true;
-          }
-        }
-        return false;
-      });
-
-  @FunctionalInterface
-  public interface ConsumeItemStack {
-
-    boolean consumeItemStack(ItemStack stack, Player player);
+  public static boolean fireConsumeStack(ItemStack stack, Player player) {
+    for (ConsumeItemStack listener : List.copyOf(CONSUME_LISTENERS)) if (!listener.consumeItemStack(stack, player)) return true;
+    return false;
+  }
+  public static boolean fireApplyDecay(Player player) {
+    for (ApplyDecay listener : List.copyOf(DECAY_LISTENERS)) if (!listener.applyDecay(player)) return true;
+    return false;
+  }
+  public static boolean fireApplyEffect(Player player) {
+    for (ApplyEffect listener : List.copyOf(EFFECT_LISTENERS)) if (!listener.applyEffect(player)) return true;
+    return false;
   }
 
-  @FunctionalInterface
-  public interface ApplyDecay {
-
-    boolean applyDecay(Player player);
-  }
-
-  @FunctionalInterface
-  public interface ApplyEffect {
-
-    boolean applyEffect(Player player);
-  }
+  @FunctionalInterface public interface ConsumeItemStack { boolean consumeItemStack(ItemStack stack, Player player); }
+  @FunctionalInterface public interface ApplyDecay { boolean applyDecay(Player player); }
+  @FunctionalInterface public interface ApplyEffect { boolean applyEffect(Player player); }
 }
