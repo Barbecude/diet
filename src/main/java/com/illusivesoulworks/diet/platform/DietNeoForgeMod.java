@@ -25,6 +25,7 @@ import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 @Mod(DietConstants.MOD_ID)
@@ -38,7 +39,7 @@ public class DietNeoForgeMod {
 
   public static final DeferredRegister<Attribute> ATTRIBUTES =
       DeferredRegister.create(Registries.ATTRIBUTE, DietConstants.MOD_ID);
-  public static final Supplier<Attribute> NATURAL_REGENERATION =
+  public static final DeferredHolder<Attribute, Attribute> NATURAL_REGENERATION =
       ATTRIBUTES.register("natural_regeneration",
           () -> DietApi.getInstance().getNaturalRegeneration());
 
