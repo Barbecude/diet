@@ -6,6 +6,7 @@ import com.illusivesoulworks.diet.api.type.IDietSuite;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -25,5 +26,5 @@ public abstract class DietApi {
   public IDietResult get(Player player, ItemStack stack) { return null; }
   public IDietResult get(Player player, ItemStack stack, int food, float saturation) { return null; }
   public IDietResult get(Player player, List<ItemStack> stacks, int food, float saturation) { return null; }
-  public Attribute getNaturalRegeneration() { return null; }
+  public Holder<Attribute> getNaturalRegeneration() { return null; }
 }
