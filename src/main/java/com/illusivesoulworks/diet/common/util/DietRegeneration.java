@@ -26,7 +26,7 @@ public class DietRegeneration {
 
   public static boolean hasRegen(Player player, boolean flag) {
     AttributeInstance attributeInstance =
-        player.getAttribute(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(DietApi.getInstance().getNaturalRegeneration()));
+        player.getAttribute(DietApi.getInstance().getNaturalRegeneration());
     return flag && (attributeInstance == null || attributeInstance.getValue() >= 1.0d);
   }
 }
