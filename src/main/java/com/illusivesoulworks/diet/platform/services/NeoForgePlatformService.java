@@ -1,0 +1,12 @@
+package com.illusivesoulworks.diet.platform.services;
+
+import java.nio.file.Path;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLLoader;
+
+public class NeoForgePlatformService implements IPlatformService {
+  @Override public String getPlatformName() { return "NeoForge"; }
+  @Override public boolean isModLoaded(String modId) { return ModList.get().isLoaded(modId); }
+  @Override public boolean isDevelopmentEnvironment() { return !FMLLoader.isProduction(); }
+  @Override public Path getGameDir() { return FMLLoader.getGamePath(); }
+}
