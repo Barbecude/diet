@@ -25,6 +25,7 @@ import com.illusivesoulworks.diet.common.data.group.DietGroups;
 import com.illusivesoulworks.diet.common.util.DietResult;
 import com.illusivesoulworks.diet.common.util.DietValueGenerator;
 import com.illusivesoulworks.diet.platform.Services;
+import com.illusivesoulworks.diet.platform.DietNeoForgeMod;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,8 +36,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.function.BiFunction;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -44,9 +45,6 @@ import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Triple;
 
 public class DietApiImpl extends DietApi {
-
-  private static final Attribute NATURAL_REGEN =
-      new RangedAttribute("diet.naturalRegeneration", 1.0d, 0.0d, 2.0d).setSyncable(true);
 
   @Override
   public Set<IDietGroup> getGroups(Player player, ItemStack input) {
@@ -177,7 +175,7 @@ public class DietApiImpl extends DietApi {
   }
 
   @Override
-  public Attribute getNaturalRegeneration() {
-    return NATURAL_REGEN;
+  public Holder<Attribute> getNaturalRegeneration() {
+    return DietNeoForgeMod.NATURAL_REGENERATION;
   }
 }
