@@ -24,10 +24,3 @@ type="required"
 versionRange="[1.21,1.22)"
 ordering="NONE"
 side="BOTH"
-
-[[dependencies.diet]]
-modId="spectrelib"
-type="required"
-versionRange="[0.17.2,0.18)"
-ordering="AFTER"
-side="BOTH"
