@@ -73,7 +73,12 @@ sourceSets {
 }
 
 dependencies {
-    implementation "com.illusivesoulworks.spectrelib:spectrelib-neoforge:0.17.2+1.21"
+    jarJar(implementation("com.illusivesoulworks.spectrelib:spectrelib-neoforge")) {
+        version {
+            strictly "[0.17.2,0.18)"
+            prefer "0.17.2+1.21"
+        }
+    }
 }
 
 processResources {
