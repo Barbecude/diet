@@ -8,6 +8,7 @@ import com.illusivesoulworks.diet.common.network.server.SPacketGroups;
 import com.illusivesoulworks.diet.common.network.server.SPacketSuites;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public final class DietNeoForgeNetwork {
@@ -18,11 +19,11 @@ public final class DietNeoForgeNetwork {
   private static void onRegisterPayloads(RegisterPayloadHandlersEvent event) {
     PayloadRegistrar registrar = event.registrar("diet");
     registrar.playToClient(SPacketEffectsInfo.TYPE, SPacketEffectsInfo.CODEC,
-        SPacketEffectsInfo::handle);
-    registrar.playToClient(SPacketDiet.TYPE, SPacketDiet.CODEC, SPacketDiet::handle);
-    registrar.playToClient(SPacketActivate.TYPE, SPacketActivate.CODEC, SPacketActivate::handle);
-    registrar.playToClient(SPacketEaten.TYPE, SPacketEaten.CODEC, SPacketEaten::handle);
-    registrar.playToClient(SPacketGroups.TYPE, SPacketGroups.CODEC, SPacketGroups::handle);
-    registrar.playToClient(SPacketSuites.TYPE, SPacketSuites.CODEC, SPacketSuites::handle);
+        (packet, context) -> context.enqueueWork(() -> SPacketEffectsInfo.handle(packet)));
+    registrar.playToClient(SPacketDiet.TYPE, SPacketDiet.CODEC, (packet, context) -> context.enqueueWork(() -> SPacketDiet.handle(packet)));
+    registrar.playToClient(SPacketActivate.TYPE, SPacketActivate.CODEC, (packet, context) -> context.enqueueWork(() -> SPacketActivate.handle(packet)));
+    registrar.playToClient(SPacketEaten.TYPE, SPacketEaten.CODEC, (packet, context) -> context.enqueueWork(() -> SPacketEaten.handle(packet)));
+    registrar.playToClient(SPacketGroups.TYPE, SPacketGroups.CODEC, (packet, context) -> context.enqueueWork(() -> SPacketGroups.handle(packet)));
+    registrar.playToClient(SPacketSuites.TYPE, SPacketSuites.CODEC, (packet, context) -> context.enqueueWork(() -> SPacketSuites.handle(packet)));
   }
 }
