@@ -17,6 +17,7 @@ import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
@@ -41,7 +42,8 @@ public class DietNeoForgeMod {
       DeferredRegister.create(Registries.ATTRIBUTE, DietConstants.MOD_ID);
   public static final DeferredHolder<Attribute, Attribute> NATURAL_REGENERATION =
       ATTRIBUTES.register("natural_regeneration",
-          () -> DietApi.getInstance().getNaturalRegeneration());
+          () -> new RangedAttribute("diet.naturalRegeneration", 1.0d, 0.0d, 2.0d)
+              .setSyncable(true));
 
   public DietNeoForgeMod(IEventBus modEventBus) {
     DietApi.setInstance(new DietApiImpl());
