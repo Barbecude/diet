@@ -1,12 +1,15 @@
 plugins {
-    id 'fabric-loom' version '1.7-SNAPSHOT'
+    id 'net.neoforged.moddev' version '1.0.11'
     id 'maven-publish'
     id 'java'
 }
 
 version = project.version
 group = project.group
-base.archivesName = project.mod_id
+
+base {
+    archivesName = project.mod_id
+}
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -15,95 +18,78 @@ java {
 
 repositories {
     mavenCentral()
-    maven {
-        name = 'Fabric'
-        url = 'https://maven.fabricmc.net/'
-    }
-    maven {
-        name = 'Ladysnake Mods'
-        url = 'https://maven.ladysnake.org/releases'
-    }
-    maven {
-        name = 'Sponge / Mixin'
-        url = 'https://repo.spongepowered.org/repository/maven-public/'
-    }
-    maven {
-        name = 'ParchmentMC'
-        url = 'https://maven.parchmentmc.org/'
-    }
+
     maven {
         name = 'Illusive Soulworks'
         url = 'https://maven.theillusivec4.top/'
     }
 }
 
-dependencies {
-    minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings loom.layered {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${parchment_mc_version}:${parchment_version}@zip")
+neoForge {
+    version = '21.0.167'
+
+    runs {
+        client {
+            client()
+        }
+
+        server {
+            server()
+        }
+
+        data {
+            data()
+        }
     }
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
-    // Cardinal Components API
-    modApi "org.ladysnake.cardinal-components-api:cardinal-components-base:${cca_version}"
-    modApi "org.ladysnake.cardinal-components-api:cardinal-components-entity:${cca_version}"
-    include "org.ladysnake.cardinal-components-api:cardinal-components-base:${cca_version}"
-    include "org.ladysnake.cardinal-components-api:cardinal-components-entity:${cca_version}"
+    mods {
+        diet {
+            sourceSet sourceSets.main
+        }
+    }
 
-    // SpectreLib
-    modImplementation "com.illusivesoulworks.spectrelib:spectrelib-fabric:${spectrelib_range}"
-    include "com.illusivesoulworks.spectrelib:spectrelib-fabric:${spectrelib_version}"
+    parchment {
+        minecraftVersion = '1.21'
+        mappingsVersion = '2024.07.28'
+    }
+}
 
-    implementation 'com.google.code.findbugs:jsr305:3.0.1'
+dependencies {
+    implementation "com.illusivesoulworks.spectrelib:spectrelib-neoforge:${spectrelib_version}"
 }
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property 'version', project.version
 
-    filesMatching("fabric.mod.json") {
-        expand 'version': project.version,
-                'fabric_mc_version_range': project.fabric_mc_version_range,
-                'license': project.license,
-                'mod_id': project.mod_id,
-                'mod_author': project.mod_author,
-                'mod_description': project.mod_description,
-                'mod_name': project.mod_name,
-                'issue_tracker': project.issue_tracker
+    filesMatching('META-INF/neoforge.mods.toml') {
+        expand(
+            version: project.version,
+            minecraft_version: project.minecraft_version,
+            mod_id: project.mod_id,
+            mod_name: project.mod_name,
+            mod_author: project.mod_author,
+            mod_description: project.mod_description,
+            license: project.license,
+            issue_tracker: project.issue_tracker
+        )
     }
 
-    filesMatching("pack.mcmeta") {
+    filesMatching('pack.mcmeta') {
         expand 'mod_name': project.mod_name
     }
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = 'UTF-8'
-    it.options.release = 21
+    options.encoding = 'UTF-8'
+    options.release = 21
 }
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${project.base.archivesName.get()}"}
+        rename { "${it}_${project.base.archivesName.get()}" }
     }
+
     from("COPYING")
     from("COPYING.LESSER")
 }
 
-loom {
-    runs {
-        client {
-            client()
-            setConfigName("Fabric Client")
-            ideConfigGenerated(true)
-            runDir("run")
-        }
-        server {
-            server()
-            setConfigName("Fabric Server")
-            ideConfigGenerated(true)
-            runDir("run")
-        }
-    }
-}
